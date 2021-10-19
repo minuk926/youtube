@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './video_item.module.css';
+import { IProp } from '../../service/youtube';
 
 interface IThumbnail {
   url: string;
@@ -9,7 +10,7 @@ interface IThumbnail {
 export interface IVideo {
   video: IVideoItem;
 }
-export interface IVideoItem {
+export interface IVideoItem extends IProp {
   id: string;
   kind: string;
   etag: string;

@@ -1,28 +1,36 @@
 import React, { useEffect, useState } from 'react';
-import './app.css';
+import styles from './app.module.css';
 import VideoList from './components/vidoe_list/video_list';
+import SearchHeader from './components/search_header/search_header';
+import { Youtube } from './service/youtube';
 
 function App() {
+  // AIzaSyCTpUx32TR3DuU3UQZn6GjYF7qCtMDfrj8
+  const youtube = new Youtube(process.env.REACT_APP_YOUTUBE_API_KEY!);
+
   const [videos, setVideos] = useState([]);
 
   useEffect(() => {
     console.log('App useEffect');
-    reqApi();
+    // @ts-ignore
+    youtube.mostPopular().then(videos => setVideos(videos));
   }, []);
 
-  const reqApi = () => {
-    const requestOptions: any = {
-      method: 'GET',
-      redirect: 'follow'
-    };
+  const handleSearch = (text: string) => {
+    console.log(text);
 
-    fetch('https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=AIzaSyCTpUx32TR3DuU3UQZn6GjYF7qCtMDfrj8', requestOptions)
-      .then(response => response.json())
-      .then(result => setVideos(result.items))
-      .catch(error => console.log('error', error));
+    //useEffect(() => {
+    // @ts-ignore
+    youtube.search(text).then(videos => setVideos(videos));
+    //}, [text]);
   };
 
-  return <VideoList videos={videos} />;
+  return (
+    <div className={styles.app}>
+      <SearchHeader onSearch={handleSearch} />
+      <VideoList videos={videos} onSearch={handleSearch} />;
+    </div>
+  );
 }
 
 export default App;
