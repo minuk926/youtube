@@ -14,14 +14,14 @@ export class Youtube {
     };
   }
 
-  async mostPopular(): Promise<IVideoItem> {
+  async mostPopular(): Promise<IVideoItem[]> {
     return fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=25&key=${this.key}`, this.getRequestOptions)
       .then(response => response.json())
       .then(result => result.items)
       .catch(error => console.log('error', error));
   }
 
-  async search(text: string): Promise<IVideoItem> {
+  async search(text: string): Promise<IVideoItem[]> {
     return (
       fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${text}&type=video&key=${this.key}`, this.getRequestOptions)
         .then(response => response.json())
