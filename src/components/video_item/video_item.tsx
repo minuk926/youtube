@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {MouseEventHandler} from 'react';
 import styles from './video_item.module.css';
-import { IProp } from '../../service/youtube';
+import {IProp} from '../../service/youtube';
+import VideoDetail from '../video_detail/video_detail';
 
 interface IThumbnail {
   url: string;
@@ -9,6 +10,7 @@ interface IThumbnail {
 }
 export interface IVideo {
   video: IVideoItem;
+  onSelectedVideo: () => void;
 }
 export interface IVideoItem extends IProp {
   id: string;
@@ -41,11 +43,20 @@ export interface IVideoItem extends IProp {
   };
 }
 
-const VideoItem = ({ video: { snippet } }: IVideo) => {
+function VideoItem({video: {snippet}, onSelectedVideo}: IVideo) {
+  const handleSelectedVideo = (e: any) => {
+    onSelectedVideo();
+  };
+
   return (
     <li className={styles.container}>
       <div className={styles.video}>
-        <img className={styles.thumbnail} src={snippet.thumbnails.medium.url} alt="video thumbnail" />
+        <img
+          onClick={handleSelectedVideo}
+          className={styles.thumbnail}
+          src={snippet.thumbnails.medium.url}
+          alt="video thumbnail"
+        />
         <div className={styles.metadata}>
           <p className={styles.title}>{snippet.title}</p>
           <p className={styles.channel}>{snippet.channelTitle}</p>
@@ -53,6 +64,6 @@ const VideoItem = ({ video: { snippet } }: IVideo) => {
       </div>
     </li>
   );
-};
+}
 
 export default VideoItem;
